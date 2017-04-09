@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Hopper Terminology">
+    <suite name="Hopper Suite" code="hopp" description="Hopper specific classes.">
+        <record-type name="loader options" code="lopt">
+            <property name="name" code="onam" type="text" description="The loader name.">
+                <cocoa key="Name"/>
+            </property>
+            <property name="options" code="oopt" optional="yes" description="All the options for this loader.">
+                <type type="individual option" list="yes"/>
+                <cocoa key="Options"/>
+            </property>
+        </record-type>
+
+        <record-type name="individual option" code="opt ">
+            <property name="name" code="onam" type="text" description="The option name.">
+                <cocoa key="Name"/>
+            </property>
+            <property name="value" code="oval" type="text" description="The option value.">
+                <cocoa key="Value"/>
+            </property>
+        </record-type>
+
+        <command name="open executable" code="hoppopex" description="Open an executable">
+            <cocoa class="HSOpenExecutable"/>
+            <direct-parameter description="The file to be opened.">
+                <type type="file"/>
+            </direct-parameter>
+            <parameter name="with options" code="opts" optional="yes" description="The loaders options.">
+                <type type="loader options" list="yes"/>
+                <cocoa key="loaderOptions"/>
+            </parameter>
+            <parameter name="parse objectivec" code="paob" optional="yes" description="Should parse Objective-C metadata.">
+                <type type="boolean"/>
+                <cocoa key="parseObjectiveC"/>
+            </parameter>
+            <parameter name="analysis" code="stan" optional="yes" description="Should start analysis after the binary file is loaded.">
+                <type type="boolean"/>
+                <cocoa key="startAnalysis"/>
+            </parameter>
+            <parameter name="only procedures" code="onpc" optional="yes" description="Code section contains only procedures.">
+                <type type="boolean"/>
+                <cocoa key="onlyProcedures"/>
+            </parameter>
+            <parameter name="execute Python" code="expy" optional="yes" description="Execute a Python script after the initial analysis.">
+                <type type="file"/>
+                <cocoa key="executePython"/>
+            </parameter>
+        </command>
+
+        <command name="open database" code="hoppopdb" description="Open an Hopper database">
+            <cocoa class="HSOpenDatabase"/>
+            <direct-parameter description="The file to be opened.">
+                <type type="file"/>
+            </direct-parameter>
+        </command>
+    </suite>￼
+</dictionary>

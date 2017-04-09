@@ -1,0 +1,27 @@
+h1
+{
+	font-size: 20pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	margin-bottom: -10px
+}
+
+#mainPage
+{
+	font-size: 20pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	text-decoration: none
+}
+
+a
+{
+	color: #0000EE;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	text-decoration: none
+}
+
+a:hover
+{
+	color: #000099;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	text-decoration: underline
+}

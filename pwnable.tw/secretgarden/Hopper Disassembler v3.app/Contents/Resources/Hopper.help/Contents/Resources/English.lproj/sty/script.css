@@ -1,0 +1,59 @@
+.global_doc {
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	font-size: 11pt;
+	margin-bottom: 60px;
+}
+
+.class_links {
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	font-size: 10pt;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 40px;
+}
+
+.class {
+}
+
+.class .name {
+	background-color: #DDDDEE;
+	font-size: 14pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	font-style:italic;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+
+.class .desc {
+	font-size: 11pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	margin-left: 30px;
+	margin-bottom: 30px;
+}
+
+.class .methods {
+	margin-bottom: 100px;
+}
+
+.class .methods .method .name {
+	background-color: #DDDDEE;
+	font-size: 13pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	font-weight: bold;
+	margin-bottom: 10px;
+	margin-left: 40px;
+}
+
+.class .methods .method .name .static {
+	font-size: 11pt;
+	font-family: "Courier New", Arial, "Sans Serif";
+	font-style: italic;
+	font-weight: normal;
+}
+
+.class .methods .method .desc {
+	font-size: 12pt;
+	font-family: "Lucida Grande", Arial, "Sans Serif";
+	margin-left: 60px;
+	margin-bottom: 30px;
+}

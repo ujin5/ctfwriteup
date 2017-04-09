@@ -1,0 +1,58 @@
+#!/usr/bin/python
+
+import os
+import sys
+import string
+
+USERDIR = "users"
+USERWHITELIST = string.letters + string.digits
+
+def prepareDirs():
+    try:
+        os.makedirs(USERDIR)
+    except OSError:
+        pass 
+
+def writeOut(s):
+    sys.stdout.write(s)
+    sys.stdout.flush()
+
+def reportOut(s):
+    sys.stderr.write(s)
+    sys.stderr.flush()
+
+def validateAndAdd(username, password):
+    
+    if not all(map(lambda c: c in USERWHITELIST, username)):
+        return "invalid username" 
+
+    userEntry = os.path.join(USERDIR, username)
+
+    if not os.path.exists(userEntry):
+        os.makedirs(userEntry, 0744)
+        with open(os.path.join(userEntry, 'password'), 'w') as f:
+            f.write(password)
+
+        # prepare mail directory
+        os.makedirs(os.path.join(userEntry, 'mail'), 0744)
+
+        return "user added successfully"
+    else:
+        return "user already exists"
+
+def createUserEntry():
+    writeOut("Username: ")
+
+    username = sys.stdin.readline().strip()
+
+    writeOut("Password: ")
+
+    password = sys.stdin.readline().strip()
+
+    output = validateAndAdd(username, password)
+
+    reportOut(output + "\n")
+
+if __name__ == "__main__":
+    prepareDirs()
+    createUserEntry() 

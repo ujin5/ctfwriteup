@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+import os
+import sys
+import string
+
+APPENDDIR = "../append"
+WHITELIST = string.letters + string.digits
+
+def writeOut(s):
+    sys.stdout.write(s)
+    sys.stdout.flush()
+
+def reportOut(s):
+    sys.stderr.write(s)
+    sys.stderr.flush()
+
+def validateAndAdd(username, serial):
+    
+    if not all(map(lambda c: c in WHITELIST, username)):
+        return "invalid username" 
+
+    if not all(map(lambda c: c in WHITELIST, serial)):
+        return "invalid serial"
+
+    serialPath = os.path.join(APPENDDIR, username)
+
+    with open(serialPath, 'w') as f:
+        f.write(serial)
+    return "serial added"
+
+def main(argc, argv):
+
+    if (argc < 2):
+        reportOut("must be logged in to proceed\n")
+        return 1
+    
+    username = sys.argv[1]
+
+    writeOut("Serial: ")
+
+    serial = sys.stdin.readline().strip()
+
+    output = validateAndAdd(username, serial)
+
+    reportOut(output + "\n")
+
+if __name__ == "__main__":
+    sys.exit(main(len(sys.argv), sys.argv))

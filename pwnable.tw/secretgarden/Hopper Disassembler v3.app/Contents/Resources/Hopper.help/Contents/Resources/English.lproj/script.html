@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta name="description" content="Python Script Reference.">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=700" />
+		<title>Scripts</title>
+		<link rel="stylesheet" type="text/css" media="screen,print" href="sty/script.css" />
+	</head>
+	<body style="background: rgb(255, 255, 255) margin: 0pt;">
+
+		<a name="API"></a>
+
+<div class="global_doc"><p>&nbsp;&nbsp;&nbsp;&nbsp;Here are all the public classes, and methods that you can use to script Hopper using Python. <br/> Before using the scripting capabilities of Hopper, you need to understand the nature of a Hopper document. The basic concept is that it is a document constructed from Segments, each containing Sections of typed bytes. Let's consider a standard MachO file. It contains at least one segment of code (usually named TEXT) containing many bytes. Hopper attaches information to each bytes of each segments. At load time, all bytes are set to the type <b>TYPE_UNDEFINED</b>. Then, starting from the entry point, as Hopper follows the program flow it will set instructions to the type <b>TYPE_CODE</b>; if an instruction needs more than one byte, the following are set to <b>TYPE_NEXT</b>. <br/> Using Python, you'll can manipulate the segments of disassembled files, retrieve information on bytes types, read or write data, create or modify label names, etc... You'll usually start by retrieving the current document, using the static method <b>Document.getCurrentDocument()</b>.<br/> <br/></div>
+<table border="1">
+<tr>
+<td valign="top">
+		<div class="class_links">
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Tag">Class Tag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth8">getName</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Procedure">Class Procedure</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth17">addTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth24">decompile</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth14">getBasicBlock</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth15">getBasicBlockAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth13">getBasicBlockCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth12">getEntryPoint</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth16">getHeapSize</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth21">getTagAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth20">getTagCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth23">getTagList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth19">hasTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth18">removeTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth22">tagIterator</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_BasicBlock">Class BasicBlock</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth34">addTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth30">getEndingAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth28">getProcedure</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth29">getStartingAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth33">getSuccessorAddressAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth31">getSuccessorCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth32">getSuccessorIndexAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth38">getTagAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth37">getTagCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth40">getTagList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth36">hasTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth35">removeTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth39">tagIterator</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Instruction">Class Instruction</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth43">getArchitecture</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth45">getArgumentCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth47">getFormattedArgument</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth50">getInstructionLength</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth44">getInstructionString</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth46">getRawArgument</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth49">isAConditionalJump</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth48">isAnInconditionalJump</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth42">stringForArchitecture</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Section">Class Section</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth56">getLength</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth54">getName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth55">getStartingAddress</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Segment">Class Segment</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth108">addReference</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth98">disassembleWholeSegment</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth101">getCommentAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth64">getFileOffset</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth65">getFileOffsetForAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth103">getInlineCommentAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth105">getInstructionAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth110">getLabelCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth111">getLabelName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth113">getLabelsList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth63">getLength</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth61">getName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth100">getNameAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth97">getNextAddressWithType</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth117">getProcedureAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth115">getProcedureAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth114">getProcedureCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth116">getProcedureIndexAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth107">getReferencesFromAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth106">getReferencesOfAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth67">getSection</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth66">getSectionCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth68">getSectionsList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth62">getStartingAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth95">getTypeAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth118">instructionStart</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth92">isThumbAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth112">labelIterator</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth87">markAsCode</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth89">markAsDataByteArray</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth91">markAsDataIntArray</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth90">markAsDataShortArray</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth88">markAsProcedure</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth85">markAsUndefined</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth86">markRangeAsUndefined</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth70">readByte</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth69">readBytes</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth74">readUInt16BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth71">readUInt16LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth75">readUInt32BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth72">readUInt32LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth76">readUInt64BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth73">readUInt64LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth109">removeReference</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth94">setARMModeAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth102">setCommentAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth104">setInlineCommentAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth99">setNameAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth93">setThumbModeAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth96">setTypeAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth57">stringForType</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth78">writeByte</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth77">writeBytes</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth82">writeUInt16BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth79">writeUInt16LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth83">writeUInt32BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth80">writeUInt32LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth84">writeUInt64BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth81">writeUInt64LE</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_Document">Class Document</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth159">addTagAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth123">ask</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth125">askDirectory</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth124">askFile</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth127">assemble</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth170">buildTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth172">destroyTag</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth154">getAddressForName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth147">getAddressFromFileOffset</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth175">getColorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth142">getCurrentAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth137">getCurrentColumn</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth122">getCurrentDocument</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth141">getCurrentSegment</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth140">getCurrentSegmentIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth128">getDatabaseFilePath</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth149">getEntryPoint</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth129">getExecutableFilePath</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth146">getFileOffsetFromAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth151">getHighlightedWord</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth153">getNameAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth158">getRawSelectedLines</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth135">getSectionByName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth133">getSegment</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth139">getSegmentAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth134">getSegmentByName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth132">getSegmentCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth138">getSegmentIndexAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth136">getSegmentsList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth143">getSelectionAddressRange</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth163">getTagAtAddressByIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth167">getTagAtIndex</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth166">getTagCount</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth162">getTagCountAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth169">getTagList</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth165">getTagListAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth171">getTagWithName</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth173">hasColorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth161">hasTagAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth148">is64Bits</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth131">log</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth126">message</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth144">moveCursorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth150">moveCursorAtEntryPoint</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth156">moveCursorOneLineDown</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth157">moveCursorOneLineUp</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth178">readByte</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth177">readBytes</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth182">readUInt16BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth179">readUInt16LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth183">readUInt32BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth180">readUInt32LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth184">readUInt64BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth181">readUInt64LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth155">refreshView</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth176">removeColorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth160">removeTagAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth145">selectAddressRange</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth174">setColorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth130">setExecutableFilePath</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth152">setNameAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth168">tagIterator</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth164">tagIteratorAtAddress</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth186">writeByte</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth185">writeBytes</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth190">writeUInt16BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth187">writeUInt16LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth191">writeUInt32BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth188">writeUInt32LE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth192">writeUInt64BE</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth189">writeUInt64LE</a><br/>
+<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<a href="#class_anchor_GlobalInformation">Class GlobalInformation</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth193">getHopperMajorVersion</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth194">getHopperMinorVersion</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth195">getHopperRevisionNumber</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#meth196">getHopperVersion</a><br/>
+<br/>
+		</div>
+<td valign="top">
+		<div class="class">
+		<a name="class_anchor_Tag"></a>
+			<div class="name">Class Tag</div>
+			<div class="desc">A Tag that could be applied to a specific address, a BasicBlock or a Procedure. Tags are built using the document.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth8"></a>
+						<div class="name">getName()</div>
+						<div class="desc">Returns a string with the tag name.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_Procedure"></a>
+			<div class="name">Class Procedure</div>
+			<div class="desc">This class represents a procedure, which is a collection of BasicBlocks. Please note that modifying the document (creating new procedure, or deleting an existing one), will result in a possible inconsistancy of the Python's Procedure object representation.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth12"></a>
+						<div class="name">getEntryPoint()</div>
+						<div class="desc">Returns the address of the entry point.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth13"></a>
+						<div class="name">getBasicBlockCount()</div>
+						<div class="desc">Returns the total number of basic blocks.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth14"></a>
+						<div class="name">getBasicBlock(index)</div>
+						<div class="desc">Get a BasicBlock object by index.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth15"></a>
+						<div class="name">getBasicBlockAtAddress(addr)</div>
+						<div class="desc">Returns the basic block which contains an instruction starting at the given address, or None.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth16"></a>
+						<div class="name">getHeapSize()</div>
+						<div class="desc">Returns the heap size of the procedure in bytes.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth17"></a>
+						<div class="name">addTag(tag)</div>
+						<div class="desc">Add a tag to the procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth18"></a>
+						<div class="name">removeTag(tag)</div>
+						<div class="desc">Remove the tag from the procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth19"></a>
+						<div class="name">hasTag(tag)</div>
+						<div class="desc">Returns True if the procedure has this tag.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth20"></a>
+						<div class="name">getTagCount()</div>
+						<div class="desc">Returns the number of tags for this procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth21"></a>
+						<div class="name">getTagAtIndex(index)</div>
+						<div class="desc">Returns the Nth tag of the procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth22"></a>
+						<div class="name">tagIterator()</div>
+						<div class="desc">Iterate over all tags of the procedure</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth23"></a>
+						<div class="name">getTagList()</div>
+						<div class="desc">Returns a list a all tags for this procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth24"></a>
+						<div class="name">decompile()</div>
+						<div class="desc">Returns a string containing the pseudo-code of the procedure, or None if the decompilation is not possible.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_BasicBlock"></a>
+			<div class="name">Class BasicBlock</div>
+			<div class="desc">A BasicBlock is a set of instructions that is guaranteed to be executed in a whole, if the control flow reach the first instruction.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth28"></a>
+						<div class="name">getProcedure()</div>
+						<div class="desc">Returns the Procedure object this BasicBlock belongs to.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth29"></a>
+						<div class="name">getStartingAddress()</div>
+						<div class="desc">Returns the address of the first instruction of the BasicBlock.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth30"></a>
+						<div class="name">getEndingAddress()</div>
+						<div class="desc">Returns the address following the last instruction of the BasicBlock.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth31"></a>
+						<div class="name">getSuccessorCount()</div>
+						<div class="desc">Returns the number of successors for this BasicBlock.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth32"></a>
+						<div class="name">getSuccessorIndexAtIndex(index)</div>
+						<div class="desc">Returns the BasicBlock index of the Nth successors.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth33"></a>
+						<div class="name">getSuccessorAddressAtIndex(index)</div>
+						<div class="desc">Returns the BasicBlock address of the Nth successors.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth34"></a>
+						<div class="name">addTag(tag)</div>
+						<div class="desc">Add a tag to the basic block.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth35"></a>
+						<div class="name">removeTag(tag)</div>
+						<div class="desc">Remove the tag from the basic block.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth36"></a>
+						<div class="name">hasTag(tag)</div>
+						<div class="desc">Returns True if the basic block has this tag.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth37"></a>
+						<div class="name">getTagCount()</div>
+						<div class="desc">Return the number of tags for this basic block.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth38"></a>
+						<div class="name">getTagAtIndex(index)</div>
+						<div class="desc">Return the Nth tag of the basic block.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth39"></a>
+						<div class="name">tagIterator()</div>
+						<div class="desc">Iterate over all tags of the basic block</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth40"></a>
+						<div class="name">getTagList()</div>
+						<div class="desc">Return a list a all tags for this basic block.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_Instruction"></a>
+			<div class="name">Class Instruction</div>
+			<div class="desc">This class represents a disassembled instruction. The class defines some constants, like <b>ARCHITECTURE_i386</b>, and <b>ARCHITECTURE_X86_64</b></div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth42"></a>
+						<div class="name">stringForArchitecture(t)<div class="static">[static]</div></div>
+						<div class="desc">Helper method which converts one of the architecture value (<b>ARCHITECTURE_UNKNOWN</b>, <b>ARCHITECTURE_i386</b>, <b>ARCHITECTURE_X86_64</b>, <b>ARCHITECTURE_ARM</b>, <b>ARCHITECTURE_ARM_THUMB</b>, or  <b>ARCHITECTURE_AARCH64</b>) to a string value.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth43"></a>
+						<div class="name">getArchitecture()</div>
+						<div class="desc">Returns the architecture.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth44"></a>
+						<div class="name">getInstructionString()</div>
+						<div class="desc">Return a strings representing the instruction.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth45"></a>
+						<div class="name">getArgumentCount()</div>
+						<div class="desc">Returns the number of argument.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth46"></a>
+						<div class="name">getRawArgument(index)</div>
+						<div class="desc">Returns the instruction argument, identified by an index. The argument is not modified by Hopper, and represents the raw ASM argument.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth47"></a>
+						<div class="name">getFormattedArgument(index)</div>
+						<div class="desc">Returns the instruction argument, identified by an index. The argument may have been modified according to the user, or by Hopper if  a specific pattern has been detected.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth48"></a>
+						<div class="name">isAnInconditionalJump()</div>
+						<div class="desc">Returns True if the instruction represents an inconditional jump.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth49"></a>
+						<div class="name">isAConditionalJump()</div>
+						<div class="desc">Returns True if the instruction represents a conditional jump.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth50"></a>
+						<div class="name">getInstructionLength()</div>
+						<div class="desc">Returns the instruction length in byte.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_Section"></a>
+			<div class="name">Class Section</div>
+			<div class="desc">This class represents a section of a segment.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth54"></a>
+						<div class="name">getName()</div>
+						<div class="desc">Returns the name of the section.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth55"></a>
+						<div class="name">getStartingAddress()</div>
+						<div class="desc">Returns the starting address of the section.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth56"></a>
+						<div class="name">getLength()</div>
+						<div class="desc">Returns the length, in bytes, of the section.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_Segment"></a>
+			<div class="name">Class Segment</div>
+			<div class="desc">This class represents a segment of a disassembled file. The class defines some values that are used as the type of bytes of the disassembled file.<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_UNDEFINED</b> : an undefined byte<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_OUTSIDE</b> : the byte is not in a mapped section<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_NEXT</b> : a byte that is part of a larger data type (ex, the second byte of a 4 bytes integer...)<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_BYTE</b> : an integer of a single byte<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_SHORT</b> : an integer of 2 bytes<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_INT</b> : an integer of 4 bytes<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_LONG</b> : an integer of 8 bytes<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_ASCII</b> : an ASCII string<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_UNICODE</b> : an UNICODE string<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_CODE</b> : an instruction<br/> &nbsp;&nbsp;&nbsp;&nbsp;<b>TYPE_PROCEDURE</b> : a procedure<br/> <br/> The class defines the constant <b>BAD_ADDRESS</b> that is returned by some methods when the requested information is incorrect.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth57"></a>
+						<div class="name">stringForType(t)<div class="static">[static]</div></div>
+						<div class="desc">Helper method that converts one of the type value (<b>TYPE_UNDEFINED</b>, <b>TYPE_NEXT</b>, ...) to a string value.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth61"></a>
+						<div class="name">getName()</div>
+						<div class="desc">Returns the name of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth62"></a>
+						<div class="name">getStartingAddress()</div>
+						<div class="desc">Returns the starting address of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth63"></a>
+						<div class="name">getLength()</div>
+						<div class="desc">Returns the length, in bytes, of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth64"></a>
+						<div class="name">getFileOffset()</div>
+						<div class="desc">Returns the file offset of the beginning of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth65"></a>
+						<div class="name">getFileOffsetForAddress(addr)</div>
+						<div class="desc">Returns the file offset of a particular address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth66"></a>
+						<div class="name">getSectionCount()</div>
+						<div class="desc">Returns the number of section this segment contains.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth67"></a>
+						<div class="name">getSection(index)</div>
+						<div class="desc">Returns a section by index. The returned object is an instance of the Section class. If the index of not in the range [0;count[, the function returns None.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth68"></a>
+						<div class="name">getSectionsList()</div>
+						<div class="desc">Returns a list containing all the sections.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth69"></a>
+						<div class="name">readBytes(addr,length)</div>
+						<div class="desc">Read bytes at a given address range. Returns False if the byte is read outside of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth70"></a>
+						<div class="name">readByte(addr)</div>
+						<div class="desc">Read a byte (between 0..255), read at a given address. Returns False if the byte is read outside of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth71"></a>
+						<div class="name">readUInt16LE(addr)</div>
+						<div class="desc">Read a 16 bits little endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth72"></a>
+						<div class="name">readUInt32LE(addr)</div>
+						<div class="desc">Read a 32 bits little endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth73"></a>
+						<div class="name">readUInt64LE(addr)</div>
+						<div class="desc">Read a 64 bits little endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth74"></a>
+						<div class="name">readUInt16BE(addr)</div>
+						<div class="desc">Read a 16 bits big endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth75"></a>
+						<div class="name">readUInt32BE(addr)</div>
+						<div class="desc">Read a 32 bits big endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth76"></a>
+						<div class="name">readUInt64BE(addr)</div>
+						<div class="desc">Read a 64 bits big endian integer.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth77"></a>
+						<div class="name">writeBytes(addr,bytesStr)</div>
+						<div class="desc">Write bytes at a given address. Bytes are given as a string. Returns True if the writting has succeed.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth78"></a>
+						<div class="name">writeByte(addr,value)</div>
+						<div class="desc">Write a byte at a given address. Returns True if the writting has succeed.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth79"></a>
+						<div class="name">writeUInt16LE(addr,value)</div>
+						<div class="desc">Write a 16 bits little endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth80"></a>
+						<div class="name">writeUInt32LE(addr,value)</div>
+						<div class="desc">Write a 32 bits little endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth81"></a>
+						<div class="name">writeUInt64LE(addr,value)</div>
+						<div class="desc">Write a 32 bits little endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth82"></a>
+						<div class="name">writeUInt16BE(addr,value)</div>
+						<div class="desc">Write a 16 bits big endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth83"></a>
+						<div class="name">writeUInt32BE(addr,value)</div>
+						<div class="desc">Write a 32 bits big endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth84"></a>
+						<div class="name">writeUInt64BE(addr,value)</div>
+						<div class="desc">Write a 32 bits big endian integer. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth85"></a>
+						<div class="name">markAsUndefined(addr)</div>
+						<div class="desc">Mark the address as being undefined.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth86"></a>
+						<div class="name">markRangeAsUndefined(addr,length)</div>
+						<div class="desc">Mark the address range as being undefined.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth87"></a>
+						<div class="name">markAsCode(addr)</div>
+						<div class="desc">Mark the address as being code.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth88"></a>
+						<div class="name">markAsProcedure(addr)</div>
+						<div class="desc">Mark the address as being a procedure.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth89"></a>
+						<div class="name">markAsDataByteArray(addr,count)</div>
+						<div class="desc">Mark the address as being byte array.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth90"></a>
+						<div class="name">markAsDataShortArray(addr,count)</div>
+						<div class="desc">Mark the address as being a short array.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth91"></a>
+						<div class="name">markAsDataIntArray(addr,count)</div>
+						<div class="desc">Mark the address as being an int array.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth92"></a>
+						<div class="name">isThumbAtAddress(addr)</div>
+						<div class="desc">Returns True is instruction at address addr is ARM Thumb mode.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth93"></a>
+						<div class="name">setThumbModeAtAddress(addr)</div>
+						<div class="desc">Set the Thumb mode at the given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth94"></a>
+						<div class="name">setARMModeAtAddress(addr)</div>
+						<div class="desc">Set the ARM mode at the given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth95"></a>
+						<div class="name">getTypeAtAddress(addr)</div>
+						<div class="desc">Returns the type of the byte at a given address. The type can be <b>TYPE_UNDEFINED</b>, <b>TYPE_NEXT</b>, <b>TYPE_BYTE</b>, <b>TYPE_SHORT</b>, <b>TYPE_INT</b>, <b>TYPE_LONG</b>, <b>TYPE_ASCII</b>, <b>TYPE_CODE</b> or <b>TYPE_PROCEDURE</b>. The method will returns None if the address is outside the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth96"></a>
+						<div class="name">setTypeAtAddress(addr,length,typeValue)</div>
+						<div class="desc">Set the type of a byte range. The type must be <b>TYPE_UNDEFINED</b>, <b>TYPE_BYTE</b>, <b>TYPE_SHORT</b>, <b>TYPE_INT</b>, <b>TYPE_LONG</b> or <b>TYPE_ASCII</b>.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth97"></a>
+						<div class="name">getNextAddressWithType(addr,typeValue)</div>
+						<div class="desc">Returns the next address of a given type. The search begins at the given address, so the returned value can be the given address itself. If no address are found, the returned value is <b>BAD_ADDRESS</b>.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth98"></a>
+						<div class="name">disassembleWholeSegment()</div>
+						<div class="desc">Disassemble the whole segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth99"></a>
+						<div class="name">setNameAtAddress(addr,name)</div>
+						<div class="desc">Set the label name at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth100"></a>
+						<div class="name">getNameAtAddress(addr)</div>
+						<div class="desc">Get the label name at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth101"></a>
+						<div class="name">getCommentAtAddress(addr)</div>
+						<div class="desc">Get the prefix comment at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth102"></a>
+						<div class="name">setCommentAtAddress(addr,comment)</div>
+						<div class="desc">Set the prefix comment at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth103"></a>
+						<div class="name">getInlineCommentAtAddress(addr)</div>
+						<div class="desc">Get the inline comment at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth104"></a>
+						<div class="name">setInlineCommentAtAddress(addr,comment)</div>
+						<div class="desc">Set the inline comment at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth105"></a>
+						<div class="name">getInstructionAtAddress(addr)</div>
+						<div class="desc">Get the disassembled instruction at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth106"></a>
+						<div class="name">getReferencesOfAddress(addr)</div>
+						<div class="desc">Get the list of addresses that reference a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth107"></a>
+						<div class="name">getReferencesFromAddress(addr)</div>
+						<div class="desc">Get the list of addresses referenced by a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth108"></a>
+						<div class="name">addReference(addr,referenced)</div>
+						<div class="desc">Add a cross reference to the 'referenced' address from 'addr' address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth109"></a>
+						<div class="name">removeReference(addr,referenced)</div>
+						<div class="desc">Remove the cross reference to the 'referenced' address from 'addr' address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth110"></a>
+						<div class="name">getLabelCount()</div>
+						<div class="desc">Get the number of named addresses.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth111"></a>
+						<div class="name">getLabelName(index)</div>
+						<div class="desc">Get a label name by index.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth112"></a>
+						<div class="name">labelIterator()</div>
+						<div class="desc">Iterate over all the labels of a segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth113"></a>
+						<div class="name">getLabelsList()</div>
+						<div class="desc">Returns a list with all the label of a segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth114"></a>
+						<div class="name">getProcedureCount()</div>
+						<div class="desc">Returns the number of procedures that has been defined in this segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth115"></a>
+						<div class="name">getProcedureAtIndex(index)</div>
+						<div class="desc">Returns the Nth Procedure object of the segment.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth116"></a>
+						<div class="name">getProcedureIndexAtAddress(address)</div>
+						<div class="desc">Returns the index of the procedure at a given address of the segment, or -1 if there is no procedure defined there.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth117"></a>
+						<div class="name">getProcedureAtAddress(address)</div>
+						<div class="desc">Returns the Procedure object at a given address of the segment, or None if there is no procedure defined at there.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth118"></a>
+						<div class="name">instructionStart(address)</div>
+						<div class="desc">Return the lowest address value of the instruction found at a particular address. If the given address is in the middle of an instruction, Hopper will look back to find the first byte of this instruction.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+		<div class="class">
+		<a name="class_anchor_Document"></a>
+			<div class="name">Class Document</div>
+			<div class="desc">This class represents the disassembled document. A document is a set of segments.</div>
+			<div class="methods">
+				<div class="method">
+				<a name="meth122"></a>
+						<div class="name">getCurrentDocument()<div class="static">[static]</div></div>
+						<div class="desc">Returns the current document.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth123"></a>
+						<div class="name">ask(msg)<div class="static">[static]</div></div>
+						<div class="desc">Open a window containing a text field, and wait for the user to give a string value. Returns the string, or returns None if the Cancel button is hit.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth124"></a>
+						<div class="name">askFile(msg,path,save)<div class="static">[static]</div></div>
+						<div class="desc">Open a file dialog with a specified title, in order to select a file. The 'save' parameter allows you to choose between on 'open' or a 'save' dialog.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth125"></a>
+						<div class="name">askDirectory(msg,path)<div class="static">[static]</div></div>
+						<div class="desc">Open a file dialog with a specified title, in order to select a directory.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth126"></a>
+						<div class="name">message(msg,buttons)<div class="static">[static]</div></div>
+						<div class="desc">Open a window containing a text field and a set of buttons. The 'Buttons' parameter is a list of strings. The function returns the index of the clicked button.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth127"></a>
+						<div class="name">assemble(instr,address,syntax)</div>
+						<div class="desc">Assemble an instruction, and returns the bytes as an array. The instruction is NOT injected in the document: the address given to the function is used to encode the instruction. You wan use the writeByte method to inject an assembled instruction. The first argument is the instruction to be assembled. The second is the address of the instruction. The last parameter is the syntax variant index. For the Intel processor, syntax = 0 for Intel syntax, and 1 for AT&T syntax.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth128"></a>
+						<div class="name">getDatabaseFilePath()</div>
+						<div class="desc">Returns the path of the current Hopper database for this document (the HOP file).</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth129"></a>
+						<div class="name">getExecutableFilePath()</div>
+						<div class="desc">Returns the path of the executable being analyzed.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth130"></a>
+						<div class="name">setExecutableFilePath(path)</div>
+						<div class="desc">Set the path of the executable being analyzed.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth131"></a>
+						<div class="name">log(msg)</div>
+						<div class="desc">Display a string message into the log window of the document.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth132"></a>
+						<div class="name">getSegmentCount()</div>
+						<div class="desc">Returns the number of segment the document contains.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth133"></a>
+						<div class="name">getSegment(index)</div>
+						<div class="desc">Returns a segment by index. The returned object is an instance of the Segment class. If the index of not in the range [0;count[, the function returns None.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth134"></a>
+						<div class="name">getSegmentByName(name)</div>
+						<div class="desc">Returns a segment by name. Return None if no segment with this name was found. If multiple segments have this name, the first one is returned.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth135"></a>
+						<div class="name">getSectionByName(name)</div>
+						<div class="desc">Returns a section by name. Return None if no segment with this name was found. If multiple sections have this name, the first one is returned.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth136"></a>
+						<div class="name">getSegmentsList()</div>
+						<div class="desc">Returns a list containing all the segments.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth137"></a>
+						<div class="name">getCurrentColumn()</div>
+						<div class="desc">Returns the column where the cursor currently is.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth138"></a>
+						<div class="name">getSegmentIndexAtAddress(addr)</div>
+						<div class="desc">Returns the segment index for a particular address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth139"></a>
+						<div class="name">getSegmentAtAddress(addr)</div>
+						<div class="desc">Returns the segment for a particular address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth140"></a>
+						<div class="name">getCurrentSegmentIndex()</div>
+						<div class="desc">Returns the segment index where the cursor is. Returns -1 if the current segment cannot be located.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth141"></a>
+						<div class="name">getCurrentSegment()</div>
+						<div class="desc">Returns the segment where the cursor is. Returns None if the current segment cannot be located.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth142"></a>
+						<div class="name">getCurrentAddress()</div>
+						<div class="desc">Returns the address where the cursor currently is.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth143"></a>
+						<div class="name">getSelectionAddressRange()</div>
+						<div class="desc">Returns a list, containing two addresses. Those address represents the range of bytes covered by the selection.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth144"></a>
+						<div class="name">moveCursorAtAddress(addr)</div>
+						<div class="desc">Move the cursor at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth145"></a>
+						<div class="name">selectAddressRange(addrRange)</div>
+						<div class="desc">Select a range of byte. The awaited argument is a list containing exactly two address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth146"></a>
+						<div class="name">getFileOffsetFromAddress(addr)</div>
+						<div class="desc">Returns the file offset corresponding to the given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth147"></a>
+						<div class="name">getAddressFromFileOffset(offset)</div>
+						<div class="desc">Returns the address corresponding to the given file offset.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth148"></a>
+						<div class="name">is64Bits()</div>
+						<div class="desc">Returns True if the disassembled document is interpreted as a 64 bits binary.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth149"></a>
+						<div class="name">getEntryPoint()</div>
+						<div class="desc">Returns the entry point of the document.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth150"></a>
+						<div class="name">moveCursorAtEntryPoint()</div>
+						<div class="desc">Move the cursor at the entry point.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth151"></a>
+						<div class="name">getHighlightedWord()</div>
+						<div class="desc">Returns the word that is currently highlighted in the assembly view.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth152"></a>
+						<div class="name">setNameAtAddress(addr,name)</div>
+						<div class="desc">Set the label name at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth153"></a>
+						<div class="name">getNameAtAddress(addr)</div>
+						<div class="desc">Get the label name at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth154"></a>
+						<div class="name">getAddressForName(name)</div>
+						<div class="desc">Get the address associated to a given name.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth155"></a>
+						<div class="name">refreshView()</div>
+						<div class="desc">Force the assembly view to be refresh.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth156"></a>
+						<div class="name">moveCursorOneLineDown()</div>
+						<div class="desc">Move the current line down, and remove the multiselection if needed. Returns True if cursor moved.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth157"></a>
+						<div class="name">moveCursorOneLineUp()</div>
+						<div class="desc">Move the current line up, and remove the multiselection if needed. Returns True if cursor moved.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth158"></a>
+						<div class="name">getRawSelectedLines()</div>
+						<div class="desc">Returns a list of strings corresponding to the current selection.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth159"></a>
+						<div class="name">addTagAtAddress(tag,addr)</div>
+						<div class="desc">Add a tag at a particular address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth160"></a>
+						<div class="name">removeTagAtAddress(tag,addr)</div>
+						<div class="desc">Remove the tag at a particular address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth161"></a>
+						<div class="name">hasTagAtAddress(tag,addr)</div>
+						<div class="desc">Returns True if the tag is present at this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth162"></a>
+						<div class="name">getTagCountAtAddress(addr)</div>
+						<div class="desc">Returns the number of tags at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth163"></a>
+						<div class="name">getTagAtAddressByIndex(addr,index)</div>
+						<div class="desc">Returns the Nth tag present at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth164"></a>
+						<div class="name">tagIteratorAtAddress(addr)</div>
+						<div class="desc">Iterates over all tags present at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth165"></a>
+						<div class="name">getTagListAtAddress(addr)</div>
+						<div class="desc">Returns the list of all tags present at a given address</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth166"></a>
+						<div class="name">getTagCount()</div>
+						<div class="desc">Returns the total number of tags available.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth167"></a>
+						<div class="name">getTagAtIndex(index)</div>
+						<div class="desc">Returns a Tag object, or None if the index does not exists.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth168"></a>
+						<div class="name">tagIterator()</div>
+						<div class="desc">Iterate over all the tags.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth169"></a>
+						<div class="name">getTagList()</div>
+						<div class="desc">Returns a list of all tags.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth170"></a>
+						<div class="name">buildTag(name)</div>
+						<div class="desc">Build a tag with a given name. If a tag with the same name already exists, it return the existing tag.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth171"></a>
+						<div class="name">getTagWithName(name)</div>
+						<div class="desc">Returns a Tag object if a tag with this name already exists, or None.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth172"></a>
+						<div class="name">destroyTag(tag)</div>
+						<div class="desc">Remove the tag from every location, and delete it.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth173"></a>
+						<div class="name">hasColorAtAddress(addr)</div>
+						<div class="desc">Returns True if a color has been defined at the given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth174"></a>
+						<div class="name">setColorAtAddress(color,addr)</div>
+						<div class="desc">Sets the color at a given address. The color is a 32bits integer representing the hexadecimal color in the form #AARRGGBB.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth175"></a>
+						<div class="name">getColorAtAddress(addr)</div>
+						<div class="desc">Returns the color at a given address. The color is a 32bits integer representing the hexadecimal color in the form #AARRGGBB.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth176"></a>
+						<div class="name">removeColorAtAddress(addr)</div>
+						<div class="desc">Remove the color at a given address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth177"></a>
+						<div class="name">readBytes(addr,length)</div>
+						<div class="desc">Read bytes from a mapped segment, and return a string. Returns False if no segments was found for this range.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth178"></a>
+						<div class="name">readByte(addr)</div>
+						<div class="desc">Read a byte from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth179"></a>
+						<div class="name">readUInt16LE(addr)</div>
+						<div class="desc">Read a 16 bits little endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth180"></a>
+						<div class="name">readUInt32LE(addr)</div>
+						<div class="desc">Read a 32 bits little endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth181"></a>
+						<div class="name">readUInt64LE(addr)</div>
+						<div class="desc">Read a 64 bits little endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth182"></a>
+						<div class="name">readUInt16BE(addr)</div>
+						<div class="desc">Read a 16 bits big endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth183"></a>
+						<div class="name">readUInt32BE(addr)</div>
+						<div class="desc">Read a 32 bits big endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth184"></a>
+						<div class="name">readUInt64BE(addr)</div>
+						<div class="desc">Read a 64 bits bif endian integer from a mapped segment. Returns False if no segments was found for this address.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth185"></a>
+						<div class="name">writeBytes(addr,byteStr)</div>
+						<div class="desc">Write bytes to a mapped segment. Bytes are given as a string. Returns False if no segments was found for this range.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth186"></a>
+						<div class="name">writeByte(addr,value)</div>
+						<div class="desc">Write a byte to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth187"></a>
+						<div class="name">writeUInt16LE(addr,value)</div>
+						<div class="desc">Write a 16 bits little endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth188"></a>
+						<div class="name">writeUInt32LE(addr,value)</div>
+						<div class="desc">Write a 32 bits little endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth189"></a>
+						<div class="name">writeUInt64LE(addr,value)</div>
+						<div class="desc">Write a 64 bits little endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth190"></a>
+						<div class="name">writeUInt16BE(addr,value)</div>
+						<div class="desc">Write a 16 bits big endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth191"></a>
+						<div class="name">writeUInt32BE(addr,value)</div>
+						<div class="desc">Write a 32 bits big endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+				<div class="method">
+				<a name="meth192"></a>
+						<div class="name">writeUInt64BE(addr,value)</div>
+						<div class="desc">Write a 64 bits big endian integer to a mapped segment. Returns True if succeeded.</div>
+				</div> <!-- method -->
+			</div> <!-- methods -->
+		</div> <!-- class -->
+
+	</body>
+</html>
