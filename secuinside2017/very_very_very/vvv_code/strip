@@ -1,0 +1,2 @@
+strip -s vvv
+strip --remove-section .note --remove-section .comment --remove-section .note.gnu.build-id vvv
