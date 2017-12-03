@@ -1,5 +1,0 @@
-#!/bin/bash
-# this file is only useful for debugging, it should not be used on the vulnerable VM
-
-/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java -Xms64m -Xint -Djava.library.path=../ro -jar ../ro/service.jar
-
